@@ -1,6 +1,6 @@
 // 查看 更新 修改
 
-import { Input, Button, Divider, Dropdown, Form, Icon, Menu, message, Card, Row, DatePicker, Popconfirm } from 'antd';
+import { Input, Button,Form, Icon, Menu, message, Card, Row, DatePicker, Popconfirm } from 'antd';
 import React, { useState, useRef } from 'react';
 import { FormComponentProps } from 'antd/es/form';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
@@ -9,20 +9,17 @@ import moment from 'moment';
 import StyledCard from '../../components/StyledCard';
 import { TableListItem } from './data';
 import { queryTask, updateTask, addTask } from '../../services/general';
-
-import CreateForm from './components/CreateForm'
+import CreateForm from './components/CreateForm';
+import UpdateForm from '../InStock/components/UpdateForm';
 
 
 const { RangePicker } = DatePicker;
 
 interface TableListProps extends FormComponentProps { }
 
-const TableList: React.FC<TableListProps> = () => {
-  // const [modalVisible, setModalVisible] = useState<boolean>(false);
-  // const [createModalVisible, handleModalVisible] = useState<boolean>(false);
-  // const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
-  // const [stepFormValues, setStepFormValues] = useState({});
-  const [modalVisible, setModalVisible] = useState<boolean>(false);
+const TableList: React.FC<TableListProps> = () => { 
+  const [createModalVisible, setCreateModalVisible] = useState<boolean>(false);
+  const [updateModalVisible, setUpdateModalVisible] = useState<boolean>(false);
   const [record, setRecord] = useState(0);
 
   // 在搜索表单中，“搜索时间段”的渲染方法
@@ -39,6 +36,10 @@ const TableList: React.FC<TableListProps> = () => {
         }
       />)
 
+  const handleShowUpdateModal = record => {
+    setUpdateModalVisible(true);
+    setRecord(record);
+  }
 
   const actionRef = useRef<ActionType>();
   const columns: ProColumns<TableListItem>[] = [
@@ -75,19 +76,13 @@ const TableList: React.FC<TableListProps> = () => {
       key: 'option',
       render: (text, record, index, action) => (
         <a
-          onClick={() => handleShowModal(record)}
+          onClick={() => handleShowUpdateModal(record)}
         >
           修改需求
         </a>
       ),
-
     },
   ];
-
-  const handleShowModal = (record) => {
-    setModalVisible(true);
-    setRecord(record);
-  }
 
   const handleSubmitTask = async value => {
     const hide = message.loading('正在提交信息...');
@@ -110,7 +105,7 @@ const TableList: React.FC<TableListProps> = () => {
         title='配送点记录'
         renderTitleRight={() => (
           <div>
-            <Button icon="plus" type="primary" onClick={() => console.log('hello')}>
+            <Button icon="plus" type="primary" onClick={() => setCreateModalVisible(true)}>
               新增配送点
             </Button>
             <Button type="primary" onClick={() => console.log('hello')}>
@@ -128,16 +123,28 @@ const TableList: React.FC<TableListProps> = () => {
           />
         )}
       />
-      {/* {(!modalVisible) ? (<div>hello</div>) : (
-        <DetailModal
-          visible={modalVisible}
-          changeVisible={setModalVisible.bind(this)}
-          descConfig={modalData.descConfig}
-          tableConfig={modalData.tableConfig}
-          descData={modalData.descData}
-          tableData={modalData.tableData}
-        />
-      )} */}
+
+      {/* 新增配送点的 Modal */}
+      <CreateForm
+        // onSubmit={async value => {
+        //   const success = await handleAddBook(value);
+        //   console.log('add book: ', value);
+        //   if (!success) return false;
+        //   changeModalVisible(false);
+        //   if (actionRef.current) {
+        //     actionRef.current.reload();
+        //   }
+        //   return true;
+        // }}
+        onCancel={() => setCreateModalVisible(false)}
+        modalVisible={createModalVisible}
+      />
+
+      {/* 修改需求的 Modal */}
+      <UpdateForm 
+        onCancel={() => setUpdateModalVisible(false)}
+        updateModalVisible={updateModalVisible}
+      />
     </PageHeaderWrapper>
   );
 };
