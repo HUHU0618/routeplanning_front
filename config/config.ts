@@ -126,7 +126,7 @@ export default {
         {
           name: '车辆类型管理',
           icon: 'book',
-          path: '/vehicle',
+          path: '/vehicle_type',
           routes: [
             // {
             //   name: '新增车辆类型',
@@ -137,7 +137,7 @@ export default {
             {
               name: '车辆类型信息查看',
               icon: 'book',
-              path: '/vehicleType/record',
+              path: '/vehicle_type/record',
               component: './demo',
             },
           ]
