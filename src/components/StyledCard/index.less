@@ -1,0 +1,39 @@
+@import '~antd/lib/style/themes/default.less';
+
+.customSelect {
+    margin-bottom: 20px;
+
+    // 标题样式
+    .title {
+        float: left;
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+    
+    // 标题右侧区样式
+    .titleRight {
+        font-size: 18px;
+
+        // titleRight先用div包裹一层，这个div的子类才是每个右浮动的独立元素
+        > div > * {
+            float: right;
+            margin:0 10px;
+        }
+    }
+    
+
+    // 覆盖ant design组件的默认样式
+    :global {
+        // 修改pro-table search的边距
+        .ant-pro-table-form-search {
+            margin: 0;
+            padding: 0;
+        }
+
+        // 不显示pro-table的toolbar
+        .ant-pro-table-toolbar {
+            display: none;
+        }
+    }
+  }
