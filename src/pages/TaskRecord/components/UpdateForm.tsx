@@ -1,8 +1,17 @@
-import { Button, DatePicker, Form, Input, Modal, Radio, Select, Steps } from 'antd';
-import React, { Component } from 'react';
+import {
+  Button,
+  DatePicker,
+  Form,
+  Input,
+  Modal,
+  Radio,
+  Select,
+  Steps
+} from "antd";
+import React, { Component } from "react";
 
-import { FormComponentProps } from 'antd/es/form';
-import { TableListItem } from '../data.d';
+import { FormComponentProps } from "antd/es/form";
+import { TableListItem } from "../data.d";
 
 export interface FormValueType extends Partial<TableListItem> {
   target?: string;
@@ -33,12 +42,12 @@ class UpdateForm extends Component<UpdateFormProps, UpdateFormState> {
   static defaultProps = {
     handleUpdate: () => {},
     handleUpdateModalVisible: () => {},
-    values: {},
+    values: {}
   };
 
   formLayout = {
     labelCol: { span: 7 },
-    wrapperCol: { span: 13 },
+    wrapperCol: { span: 13 }
   };
 
   constructor(props: UpdateFormProps) {
@@ -49,13 +58,13 @@ class UpdateForm extends Component<UpdateFormProps, UpdateFormState> {
         name: props.values.name,
         desc: props.values.desc,
         key: props.values.key,
-        target: '0',
-        template: '0',
-        type: '1',
-        time: '',
-        frequency: 'month',
+        target: "0",
+        template: "0",
+        type: "1",
+        time: "",
+        frequency: "month"
       },
-      currentStep: 0,
+      currentStep: 0
     };
   }
 
@@ -67,7 +76,7 @@ class UpdateForm extends Component<UpdateFormProps, UpdateFormState> {
       const formVals = { ...oldValue, ...fieldsValue };
       this.setState(
         {
-          formVals,
+          formVals
         },
         () => {
           if (currentStep < 2) {
@@ -75,7 +84,7 @@ class UpdateForm extends Component<UpdateFormProps, UpdateFormState> {
           } else {
             handleUpdate(formVals);
           }
-        },
+        }
       );
     });
   };
@@ -83,14 +92,14 @@ class UpdateForm extends Component<UpdateFormProps, UpdateFormState> {
   backward = () => {
     const { currentStep } = this.state;
     this.setState({
-      currentStep: currentStep - 1,
+      currentStep: currentStep - 1
     });
   };
 
   forward = () => {
     const { currentStep } = this.state;
     this.setState({
-      currentStep: currentStep + 1,
+      currentStep: currentStep + 1
     });
   };
 
@@ -99,76 +108,82 @@ class UpdateForm extends Component<UpdateFormProps, UpdateFormState> {
     if (currentStep === 1) {
       return [
         <FormItem key="target" {...this.formLayout} label="监控对象">
-          {form.getFieldDecorator('target', {
-            initialValue: formVals.target,
+          {form.getFieldDecorator("target", {
+            initialValue: formVals.target
           })(
-            <Select style={{ width: '100%' }}>
+            <Select style={{ width: "100%" }}>
               <Option value="0">表一</Option>
               <Option value="1">表二</Option>
-            </Select>,
+            </Select>
           )}
         </FormItem>,
         <FormItem key="template" {...this.formLayout} label="规则模板">
-          {form.getFieldDecorator('template', {
-            initialValue: formVals.template,
+          {form.getFieldDecorator("template", {
+            initialValue: formVals.template
           })(
-            <Select style={{ width: '100%' }}>
+            <Select style={{ width: "100%" }}>
               <Option value="0">规则模板一</Option>
               <Option value="1">规则模板二</Option>
-            </Select>,
+            </Select>
           )}
         </FormItem>,
         <FormItem key="type" {...this.formLayout} label="规则类型">
-          {form.getFieldDecorator('type', {
-            initialValue: formVals.type,
+          {form.getFieldDecorator("type", {
+            initialValue: formVals.type
           })(
             <RadioGroup>
               <Radio value="0">强</Radio>
               <Radio value="1">弱</Radio>
-            </RadioGroup>,
+            </RadioGroup>
           )}
-        </FormItem>,
+        </FormItem>
       ];
     }
     if (currentStep === 2) {
       return [
         <FormItem key="time" {...this.formLayout} label="开始时间">
-          {form.getFieldDecorator('time', {
-            rules: [{ required: true, message: '请选择开始时间！' }],
+          {form.getFieldDecorator("time", {
+            rules: [{ required: true, message: "请选择开始时间！" }]
           })(
             <DatePicker
-              style={{ width: '100%' }}
+              style={{ width: "100%" }}
               showTime
               format="YYYY-MM-DD HH:mm:ss"
               placeholder="选择开始时间"
-            />,
+            />
           )}
         </FormItem>,
         <FormItem key="frequency" {...this.formLayout} label="调度周期">
-          {form.getFieldDecorator('frequency', {
-            initialValue: formVals.frequency,
+          {form.getFieldDecorator("frequency", {
+            initialValue: formVals.frequency
           })(
-            <Select style={{ width: '100%' }}>
+            <Select style={{ width: "100%" }}>
               <Option value="month">月</Option>
               <Option value="week">周</Option>
-            </Select>,
+            </Select>
           )}
-        </FormItem>,
+        </FormItem>
       ];
     }
     return [
       <FormItem key="name" {...this.formLayout} label="规则名称">
-        {form.getFieldDecorator('name', {
-          rules: [{ required: true, message: '请输入规则名称！' }],
-          initialValue: formVals.name,
+        {form.getFieldDecorator("name", {
+          rules: [{ required: true, message: "请输入规则名称！" }],
+          initialValue: formVals.name
         })(<Input placeholder="请输入" />)}
       </FormItem>,
       <FormItem key="desc" {...this.formLayout} label="规则描述">
-        {form.getFieldDecorator('desc', {
-          rules: [{ required: true, message: '请输入至少五个字符的规则描述！', min: 5 }],
-          initialValue: formVals.desc,
+        {form.getFieldDecorator("desc", {
+          rules: [
+            {
+              required: true,
+              message: "请输入至少五个字符的规则描述！",
+              min: 5
+            }
+          ],
+          initialValue: formVals.desc
         })(<TextArea rows={4} placeholder="请输入至少五个字符" />)}
-      </FormItem>,
+      </FormItem>
     ];
   };
 
@@ -176,50 +191,75 @@ class UpdateForm extends Component<UpdateFormProps, UpdateFormState> {
     const { onCancel: handleUpdateModalVisible, values } = this.props;
     if (currentStep === 1) {
       return [
-        <Button key="back" style={{ float: 'left' }} onClick={this.backward}>
+        <Button key="back" style={{ float: "left" }} onClick={this.backward}>
           上一步
         </Button>,
-        <Button key="cancel" onClick={() => handleUpdateModalVisible(false, values)}>
+        <Button
+          key="cancel"
+          onClick={() => handleUpdateModalVisible(false, values)}
+        >
           取消
         </Button>,
-        <Button key="forward" type="primary" onClick={() => this.handleNext(currentStep)}>
+        <Button
+          key="forward"
+          type="primary"
+          onClick={() => this.handleNext(currentStep)}
+        >
           下一步
-        </Button>,
+        </Button>
       ];
     }
     if (currentStep === 2) {
       return [
-        <Button key="back" style={{ float: 'left' }} onClick={this.backward}>
+        <Button key="back" style={{ float: "left" }} onClick={this.backward}>
           上一步
         </Button>,
-        <Button key="cancel" onClick={() => handleUpdateModalVisible(false, values)}>
+        <Button
+          key="cancel"
+          onClick={() => handleUpdateModalVisible(false, values)}
+        >
           取消
         </Button>,
-        <Button key="submit" type="primary" onClick={() => this.handleNext(currentStep)}>
+        <Button
+          key="submit"
+          type="primary"
+          onClick={() => this.handleNext(currentStep)}
+        >
           完成
-        </Button>,
+        </Button>
       ];
     }
     return [
-      <Button key="cancel" onClick={() => handleUpdateModalVisible(false, values)}>
+      <Button
+        key="cancel"
+        onClick={() => handleUpdateModalVisible(false, values)}
+      >
         取消
       </Button>,
-      <Button key="forward" type="primary" onClick={() => this.handleNext(currentStep)}>
+      <Button
+        key="forward"
+        type="primary"
+        onClick={() => this.handleNext(currentStep)}
+      >
         下一步
-      </Button>,
+      </Button>
     ];
   };
 
   render() {
-    const { updateModalVisible, onCancel: handleUpdateModalVisible, values } = this.props;
+    const {
+      updateModalVisible,
+      onCancel: handleUpdateModalVisible,
+      values
+    } = this.props;
     const { currentStep, formVals } = this.state;
 
     return (
       <Modal
         width={640}
-        bodyStyle={{ padding: '32px 40px 48px' }}
+        bodyStyle={{ padding: "32px 40px 48px" }}
         destroyOnClose
-        title="规则配置"
+        title="修改需求量"
         visible={updateModalVisible}
         footer={this.renderFooter(currentStep)}
         onCancel={() => handleUpdateModalVisible(false, values)}

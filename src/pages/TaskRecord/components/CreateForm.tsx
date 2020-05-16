@@ -1,7 +1,7 @@
-import { Form, Input, Modal } from 'antd';
+import { Form, Input, Modal } from "antd";
 
-import { FormComponentProps } from 'antd/es/form';
-import React from 'react';
+import { FormComponentProps } from "antd/es/form";
+import React from "react";
 
 const FormItem = Form.Item;
 
@@ -20,17 +20,38 @@ const CreateForm: React.FC<CreateFormProps> = props => {
       handleAdd(fieldsValue);
     });
   };
+  // const okHandle = () => {
+  //   form.validateFields(async (err, fieldsValue) => {
+  //     if (err) return;
+
+  //     // 添加成功则reset
+  //     const reset = await handleSubmit(fieldsValue);
+  //     if (reset) form.resetFields();
+  //   });
+  // };
   return (
     <Modal
       destroyOnClose
-      title="新建规则"
+      title="新增配送点"
       visible={modalVisible}
       onOk={okHandle}
       onCancel={() => onCancel()}
     >
-      <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="描述">
-        {form.getFieldDecorator('desc', {
-          rules: [{ required: true, message: '请输入至少五个字符的规则描述！', min: 5 }],
+      <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="横坐标">
+        {form.getFieldDecorator("xaxis", {
+          rules: [{ required: true, message: "请输入横坐标！", min: 1 }]
+        })(<Input placeholder="请输入" />)}
+      </FormItem>
+
+      <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="纵坐标">
+        {form.getFieldDecorator("yaxis", {
+          rules: [{ required: true, message: "请输入纵坐标！", min: 1 }]
+        })(<Input placeholder="请输入" />)}
+      </FormItem>
+
+      <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="需求量">
+        {form.getFieldDecorator("demand", {
+          rules: [{ required: true, message: "请输入需求量！", min: 1 }]
         })(<Input placeholder="请输入" />)}
       </FormItem>
     </Modal>
