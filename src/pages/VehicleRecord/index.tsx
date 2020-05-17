@@ -18,7 +18,7 @@ import { PageHeaderWrapper } from "@ant-design/pro-layout";
 import ProTable, { ProColumns, ActionType } from "@ant-design/pro-table";
 import StyledCard from "../../components/StyledCard";
 import { TableListItem } from "./data";
-import { queryVehicle } from "../../services/general";
+import { queryVehicle, addVehicle } from "../../services/general";
 import moment from "moment";
 import CreateForm from "./components/CreateForm";
 
@@ -62,42 +62,20 @@ const TableList: React.FC<TableListProps> = () => {
       key: "typeId",
       sorter: (a, b) => a.typeId - b.typeId
     }
-    // {
-    //   title: '入库时间',
-    //   dataIndex: 'createdAt',
-    //   valueType: 'dateTime',
-    //   sorter: (a, b) => moment(a.createdAt).isBefore(b.createdAt),
-    //   renderFormItem: renderRangePicker, // 在搜索表单中，渲染该项（定制化)
-    //   formItemProps: { prop: { onReset: () => console.log('createdAt reset') } }
-    // },
-    // {
-    //   title: '备注',
-    //   dataIndex: 'remark',
-    // },
-    // {
-    //   title: '上次更新时间',
-    //   dataIndex: 'updatedAt',
-    //   sorter: true,
-    //   valueType: 'dateTime',
-    //   sorter: (a, b) => moment(a.createdAt).isBefore(b.createdAt),
-    //   renderFormItem: renderRangePicker, // 在搜索表单中，渲染该项（定制化）
-    // },
-    // {
-    //   title: '操作',
-    //   dataIndex: 'option',
-    //   valueType: 'option',
-    //   render: (text, record, index, action) => (
-    //     <a
-    //       onClick={() => {
-    //         // handleUpdateModalVisible(true);
-    //         // setStepFormValues(record);
-    //       }}
-    //     >
-    //       查看详情
-    //     </a>
-    //   ),
-    // },
   ];
+
+  const handleAddVehicle = async (fields, action) => {
+    const hide = message.loading("正在添加..."); // 正在添加loading出现
+    const res = await addVehicle({ ...fields }); // 添加操作
+    hide(); // 正在添加loading消失
+    if (!res.success) return false; // 如果失败就return false
+    message.success("添加成功！"); //成功则提示添加成功并return true
+    return true;
+  };
+
+  const changeModalVisible = visible => {
+    this.setState({ modalVisible: visible });
+  };
 
   return (
     <PageHeaderWrapper>
@@ -127,16 +105,16 @@ const TableList: React.FC<TableListProps> = () => {
 
       {/* 新增车辆的 Modal */}
       <CreateForm
-        // onSubmit={async value => {
-        //   const success = await handleAddBook(value);
-        //   console.log('add book: ', value);
-        //   if (!success) return false;
-        //   changeModalVisible(false);
-        //   if (actionRef.current) {
-        //     actionRef.current.reload();
-        //   }
-        //   return true;
-        // }}
+        onSubmit={async value => {
+          const success = await handleAddVehicle(value);
+          console.log("add vehicle: ", value);
+          if (!success) return false;
+          // changeModalVisible(false);
+          if (actionRef.current) {
+            actionRef.current.reload();
+          }
+          return true;
+        }}
         onCancel={() => setCreateModalVisible(false)}
         modalVisible={createModalVisible}
       />

@@ -43,7 +43,7 @@ const CreateForm: React.FC<CreateFormProps> = props => {
         label="车辆型号"
       >
         {form.getFieldDecorator("typeId", {
-          rules: [{ required: true, message: "请输入车辆型号！", min: 5 }]
+          rules: [{ required: true, message: "请输入车辆型号！", min: 1 }]
         })(<Input placeholder="请输入" />)}
       </FormItem>
     </Modal>

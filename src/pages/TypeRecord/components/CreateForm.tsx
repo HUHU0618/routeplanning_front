@@ -50,10 +50,10 @@ const CreateForm: React.FC<CreateFormProps> = props => {
       <FormItem
         labelCol={{ span: 5 }}
         wrapperCol={{ span: 15 }}
-        label="车辆载重/吨"
+        label="车辆载重"
       >
-        {form.getFieldDecorator("xaxis", {
-          rules: [{ required: true, message: "请输入横坐标！", min: 1 }]
+        {form.getFieldDecorator("load", {
+          rules: [{ required: true, message: "请输入车辆载重！", min: 1 }]
         })(<Input placeholder="请输入" />)}
       </FormItem>
     </Modal>
