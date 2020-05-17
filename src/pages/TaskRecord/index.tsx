@@ -30,7 +30,7 @@ import UpdateForm from "./components/UpdateForm";
 
 const { RangePicker } = DatePicker;
 
-interface TableListProps extends FormComponentProps {}
+interface TableListProps extends FormComponentProps { }
 
 const TableList: React.FC<TableListProps> = () => {
   const [createModalVisible, setCreateModalVisible] = useState<boolean>(false);
@@ -85,8 +85,8 @@ const TableList: React.FC<TableListProps> = () => {
         // </Button>
         <a
           onClick={() => setUpdateModalVisible(true)}
-          // onClick={() => handleShowUpdateModal(record)}
-          // onClick={() => handleUpdateTask(id, demand, action)}
+        // onClick={() => handleShowUpdateModal(record)}
+        // onClick={() => handleUpdateTask(id, demand, action)}
         >
           修改需求量
         </a>
@@ -107,13 +107,13 @@ const TableList: React.FC<TableListProps> = () => {
   //   message.success('提交成功'); // 成功则提示添加成功并return true
   //   return true;
   // }
-  const handleUpdateTask = async (fields, action) => {
+  const handleUpdateTask = async (id, demand) => {
     const hide = message.loading("正在修改需求量...");
-    const res = await updateTask({ ...fields });
+    const res = await updateTask({ id, demand });
     hide(); // 正在添加loading消失
     if (!res.success) return false; // 如果失败就return false
     message.success("修改需求量成功"); //成功则提示添加成功并return true
-    action.reload(); // 刷新表格
+    // action.reload(); // 刷新表格
     return true;
   };
 
@@ -169,7 +169,6 @@ const TableList: React.FC<TableListProps> = () => {
           const success = await handleAddTask(value);
           console.log("add task: ", value);
           if (!success) return false;
-          // changeModalVisible(false);
           if (actionRef.current) {
             actionRef.current.reload();
           }
@@ -185,7 +184,6 @@ const TableList: React.FC<TableListProps> = () => {
           const success = await handleUpdateTask(value);
           console.log("update task: ", value);
           if (!success) return false;
-          changeModalVisible(false);
           if (actionRef.current) {
             actionRef.current.reload();
           }
