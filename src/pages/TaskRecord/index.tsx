@@ -90,13 +90,12 @@ const TableList: React.FC<TableListProps> = () => {
     }
   ];
 
-  const handleUpdateTask = async (value) => {
+  const handleUpdateTask = async (demand) => {
     const hide = message.loading("正在修改需求量...");
-    const res = await updateTask({ id, demand: value.demand });
-    console.log(`value:${value}`);
+    const res = await updateTask({ id, demand });
     hide(); // 正在添加loading消失
     if (!res.success) return false; // 如果失败就return false
-    message.success("修改需求量成功"); //成功则提示添加成功并return true
+    message.success("修改需求量成功"); // 成功则提示添加成功并return true
     // action.reload(); // 刷新表格
     return true;
   };
@@ -106,7 +105,7 @@ const TableList: React.FC<TableListProps> = () => {
     const res = await addTask({ ...fields }); // 添加操作
     hide(); // 正在添加loading消失
     if (!res.success) return false; // 如果失败就return false
-    message.success("添加成功！"); //成功则提示添加成功并return true
+    message.success("添加成功！"); // 成功则提示添加成功并return true
     return true;
   };
 
@@ -122,7 +121,7 @@ const TableList: React.FC<TableListProps> = () => {
 
     hide(); // 正在添加loading消失
     if (!res.success) return false; // 如果失败就return false
-    message.success("修改需求量成功"); //成功则提示添加成功并return true
+    message.success("修改需求量成功"); // 成功则提示添加成功并return true
     // action.reload(); // 刷新表格
     return true;
   };
@@ -180,9 +179,8 @@ const TableList: React.FC<TableListProps> = () => {
 
       {/* 修改需求的 Modal */}
       <UpdateForm
-        onSubmit={async demand => {
-          const success = await handleUpdateTask(id, demand);
-          console.log("update task: ", demand);
+        onSubmit={async data => {
+          const success = await handleUpdateTask(data.demand);
           if (!success) return false;
           if (actionRef.current) {
             actionRef.current.reload();
