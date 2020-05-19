@@ -286,16 +286,17 @@ const FormItem = Form.Item;
 interface UpdateFormProps extends FormComponentProps {
   modalVisible: boolean;
   onSubmit: (fieldsValue: { desc: string }) => void;
+  // onSubmit: (fieldsValue: {}) => void;
   onCancel: () => void;
 }
 
 const UpdateForm: React.FC<UpdateFormProps> = props => {
-  const { modalVisible, form, onSubmit: handleAdd, onCancel } = props;
+  const { modalVisible, form, onSubmit: handleUpdate, onCancel } = props;
   const okHandle = () => {
     form.validateFields((err, fieldsValue) => {
       if (err) return;
       form.resetFields();
-      handleAdd(fieldsValue);
+      handleUpdate(fieldsValue);
     });
   };
 

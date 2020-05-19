@@ -1,4 +1,9 @@
 /*
+ * @Descripttion: 
+ * @version: 
+ * @Author: huhu
+ */
+/*
  * @Descripttion:
  * @version:
  * @Author: huhu
@@ -41,7 +46,7 @@ export async function updateTask(params: TableListParams) {
   });
 }
 
-export function routePlanning(params: TableListParams) {
+export async function routePlanning(params: TableListParams) {
   return request("/api/routePlanning", {
     method: "POST",
     data: {

@@ -1,17 +1,6 @@
 // 查看 更新 修改
 
-import {
-  Input,
-  Button,
-  Form,
-  Icon,
-  Menu,
-  message,
-  Card,
-  Row,
-  DatePicker,
-  Popconfirm
-} from "antd";
+import { Input, Button, Form, Icon, Menu, message, Card, Row, DatePicker, Popconfirm, Table, Tag, Space } from "antd";
 import React, { useState, useRef } from "react";
 import { FormComponentProps } from "antd/es/form";
 import { PageHeaderWrapper } from "@ant-design/pro-layout";
@@ -28,18 +17,34 @@ import {
 import CreateForm from "./components/CreateForm";
 import UpdateForm from "./components/UpdateForm";
 
-const { RangePicker } = DatePicker;
-
 interface TableListProps extends FormComponentProps { }
+
+
+const tableColumns = [
+  {
+    title: '车辆编号',
+    dataIndex: 'id',
+    // key: 'id',
+    // render: text => <a>{text}</a>,
+  },
+  {
+    title: '配送路线',
+    dataIndex: 'route',
+    // key: 'route', 
+  },
+];
+
+const data = [];
 
 const TableList: React.FC<TableListProps> = () => {
   const [createModalVisible, setCreateModalVisible] = useState<boolean>(false);
   const [updateModalVisible, setUpdateModalVisible] = useState<boolean>(false);
-  const [record, setRecord] = useState(0);
+  const [routeModalVisible, setRouteModalVisible] = useState<boolean>(false);
+  const [id, setId] = useState(0);
 
-  const handleShowUpdateModal = record => {
+  const handleShowUpdateModal = id => {
     setUpdateModalVisible(true);
-    setRecord(record);
+    setId(id);
   };
 
   const actionRef = useRef<ActionType>();
@@ -75,18 +80,9 @@ const TableList: React.FC<TableListProps> = () => {
       dataIndex: "option",
       valueType: "option",
       key: "option",
-      render: (id, demand, action) => (
-        //   <Button
-        //   icon="plus"
-        //   type="primary"
-        //   onClick={() => setUpdateModalVisible(true)}
-        // >
-        //   修改需求量
-        // </Button>
+      render: (_, record) => (
         <a
-          onClick={() => setUpdateModalVisible(true)}
-        // onClick={() => handleShowUpdateModal(record)}
-        // onClick={() => handleUpdateTask(id, demand, action)}
+          onClick={() => handleShowUpdateModal(record.id)}
         >
           修改需求量
         </a>
@@ -94,22 +90,10 @@ const TableList: React.FC<TableListProps> = () => {
     }
   ];
 
-  // const handleSubmitTask = async value => {
-  //   const hide = message.loading('正在提交信息...');
-  //   console.log('value: ', value);
-  //   const res = await updateTask({
-  //     // id: record.id,
-  //     demand: record.demand,
-  //     // remark: value.remark,
-  //   });
-  //   hide(); // 正在添加loading消失
-  //   if (!res.success) return false; // 如果失败就return false
-  //   message.success('提交成功'); // 成功则提示添加成功并return true
-  //   return true;
-  // }
-  const handleUpdateTask = async (id, demand) => {
+  const handleUpdateTask = async (value) => {
     const hide = message.loading("正在修改需求量...");
-    const res = await updateTask({ id, demand });
+    const res = await updateTask({ id, demand: value.demand });
+    console.log(`value:${value}`);
     hide(); // 正在添加loading消失
     if (!res.success) return false; // 如果失败就return false
     message.success("修改需求量成功"); //成功则提示添加成功并return true
@@ -126,13 +110,28 @@ const TableList: React.FC<TableListProps> = () => {
     return true;
   };
 
-  // const handleRoutePlanning = function () {
 
-  // }
+  const handleRoutePlanning = async () => {
+    const hide = message.loading("正在转换为字符串...");
+    const res = await routePlanning();
+    const tempPath = [];
+    console.log("res:", res);
+    // for (let i = 0; i < res.length; ++i){
+    //   tempPath[i] = res[i].join("-->");
+    // }
 
-  const changeModalVisible = visible => {
-    this.setState({ modalVisible: visible });
+    hide(); // 正在添加loading消失
+    if (!res.success) return false; // 如果失败就return false
+    message.success("修改需求量成功"); //成功则提示添加成功并return true
+    // action.reload(); // 刷新表格
+    return true;
   };
+
+
+
+  // const changeModalVisible = visible => {
+  //   this.setState({ modalVisible: visible });
+  // };
 
   return (
     <PageHeaderWrapper>
@@ -147,7 +146,7 @@ const TableList: React.FC<TableListProps> = () => {
             >
               新增配送点
             </Button>
-            <Button type="primary" onClick={() => console.log("hello")}>
+            <Button type="primary" onClick={() => handleRoutePlanning()}>
               规划路径
             </Button>
           </div>
@@ -166,8 +165,9 @@ const TableList: React.FC<TableListProps> = () => {
       {/* 新增配送点的 Modal */}
       <CreateForm
         onSubmit={async value => {
+          // const success = await handleAddTask(value);
+          // console.log("add task: ", value);
           const success = await handleAddTask(value);
-          console.log("add task: ", value);
           if (!success) return false;
           if (actionRef.current) {
             actionRef.current.reload();
@@ -180,9 +180,9 @@ const TableList: React.FC<TableListProps> = () => {
 
       {/* 修改需求的 Modal */}
       <UpdateForm
-        onSubmit={async value => {
-          const success = await handleUpdateTask(value);
-          console.log("update task: ", value);
+        onSubmit={async demand => {
+          const success = await handleUpdateTask(id, demand);
+          console.log("update task: ", demand);
           if (!success) return false;
           if (actionRef.current) {
             actionRef.current.reload();
@@ -192,8 +192,11 @@ const TableList: React.FC<TableListProps> = () => {
         onCancel={() => setUpdateModalVisible(false)}
         modalVisible={updateModalVisible}
       />
+
+
     </PageHeaderWrapper>
   );
 };
+
 
 export default Form.create<TableListProps>()(TableList);
